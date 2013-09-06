@@ -9,17 +9,17 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
     PivotTableApp.sales = {
 
     init: function(sales_url) {
-        
+
         _dialog = PivotTableApp.dialog.init();
         _table_columns = PivotTableApp.table_columns.init();
 
-        this._initDataTable(sales_url);        
+        this._initDataTable(sales_url);
         this._initDroppables();
 
         $('.btn-configure-pivot').click(function(e) {
-            _dialog.open();            
+            _dialog.open();
         });
-    },    
+    },
 
     _initDataTable: function(sales_url) {
         $(d).on('click', '#sales tbody tr', function() {
@@ -41,7 +41,7 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
                 { "bVisible": true, sClass: 'amount' }
            ]
         });
-    },    
+    },
 
     _initDroppables: function() {
 
@@ -73,8 +73,12 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
 
     _rowLabelDropped: function(pivotRowLabels, columnName) {
 
-        $('div', pivotRowLabels).text(columnName);
-        var item = _table_columns.findColumn(columnName);       
+        var target = $('div', pivotRowLabels);
+        if ($.trim(target.text()).length > 0) {
+            return;
+        }
+        target.text(columnName);
+        var item = _table_columns.findColumn(columnName);
         item.addClass('selected');
         $(item.get(0)).draggable("disable");
 
@@ -110,10 +114,16 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
         if (!headRow.length) {
             alert('Select Row Label first!');
         } else {
-            var item = $(".draggable-columns li:contains('" + columnName + "')");
+            var target = $('div', pivotColumnLabels);
+            if ($.trim(target.text()).length > 0) {
+                return;
+            }
+
+            var item = _table_columns.findColumn(columnName);
             item.addClass('selected');
             $(item.get(0)).draggable("disable");
-            $('div', pivotColumnLabels).text(columnName);
+
+            target.text(columnName);
             var uniqueValues = this._uniqueValues(columnName);
             $(uniqueValues).each(function() {
                 var cell = $('<th/>').text(this);
@@ -142,7 +152,7 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
                 alert('Select Column Labels first!');
             } else {
 
-                var item = $(".draggable-columns li:contains('" + columnName + "')");
+                var item = _table_columns.findColumn(columnName);
                 item.addClass('selected');
                 $(item.get(0)).draggable("disable");
                 $('div', pivotValues).text(columnName);
@@ -195,7 +205,7 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
 
         var result = 0;
         var precision = 2;
-        
+
         var self = this;
         $('#sales tbody tr').each(function() {
             var row = $(this);
