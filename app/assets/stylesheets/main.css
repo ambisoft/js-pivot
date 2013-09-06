@@ -1,0 +1,74 @@
+
+table.display tr.even.row_selected td {
+    background-color: #B0BED9;
+}
+
+table.display tr.odd.row_selected td {
+    background-color: #9FAFD1;
+}
+
+table.dataTable thead th {
+    text-align: left;
+}
+
+#sales_info {
+    display: none;
+}
+
+ul.draggable-columns {
+    margin: 0.5em 0 0 0;
+    padding: 0 0 0 1em;
+}
+
+ul.draggable-columns li {
+    cursor: pointer;
+}
+
+ul.draggable-columns li.selected {
+    text-decoration: line-through;
+}
+
+ul.pivot-roles {
+    list-style-type: none;
+    padding: 0;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    overflow: hidden;
+    margin: 0;    
+}
+
+ul.pivot-roles li {    
+    border: 1px solid black;
+    width: 150px;
+    height: 100px;
+    margin-bottom: 20px;    
+}
+
+ul.pivot-roles li h4 {
+    font-size: 85%;
+    margin: 3px 0 5px 5px;
+}
+
+ul.pivot-roles li div {
+    margin-left: 5px;
+    font-size: 85%;
+}
+
+#table-pivot {
+    margin-top: 1em;    
+}
+
+#table-pivot td, #table-pivot th {
+    border: 1px solid black;
+    padding: 3px 10px;
+}
+
+#table-pivot th, #table-pivot td {
+    font-size: 85%;
+}
+
+td.amount {
+    text-align: right;
+    padding-right: 10px;
+}

@@ -1,0 +1,59 @@
+<h1>Grocery Store - Pivot Tables in Javascript demo</h1>
+
+<table cellpadding="0" cellspacing="0" border="0" class="display" id="sales">
+	<thead>
+		<tr>
+			<th width="20%">Product</th>
+			<th>Origin</th>
+			<th width="0%">Day</th>
+            <th width="25%">Day</th>
+			<th width="5%">Sales</th>			
+		</tr>
+	</thead>
+	<tbody>
+		
+	</tbody>
+    
+</table>
+
+<div style="margin:1em 0;">
+  <input type="button" value="Generate Pivot Table from selected"
+         id="btn-configure-pivot"/>
+</div>
+
+<div id="dialog-modal" title="Define Pivot Table">
+  
+    All Columns:
+    <ul class="draggable-columns">      
+    </ul>
+    
+    <table id="table-pivot">
+      <thead>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  
+    <ul class="pivot-roles">
+      <li class="pivot-row-labels">
+        <h4>Row Label</h4>
+        <div></div>
+      </li>
+      <li class="pivot-column-labels">
+        <h4>Column Labels</h4>
+        <div></div>
+      </li>    
+      <li class="pivot-values">
+        <h4>Values</h4>
+        <div></div>
+      </li>
+    </ul>      
+  
+</div>
+
+<script type="text/javascript">
+  $(function() {
+    var sales_url = '<%= sales_path(:format => :json) %>';
+    PivotTableApp.sales.init(sales_url);
+  });
+</script>
