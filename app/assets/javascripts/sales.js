@@ -16,7 +16,7 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
         this._initDataTable(sales_url);        
         this._initDroppables();
 
-        $('#btn-configure-pivot').click(function(e) {
+        $('.btn-configure-pivot').click(function(e) {
             _dialog.open();            
         });
     },    
@@ -73,14 +73,8 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
 
     _rowLabelDropped: function(pivotRowLabels, columnName) {
 
-        if (columnName != 'Product') {
-            alert('Only Product column can be dropped here in this demo!');
-            return;
-        }
-        
         $('div', pivotRowLabels).text(columnName);
-
-        var item = $(".draggable-columns li:contains('" + columnName + "')");
+        var item = _table_columns.findColumn(columnName);       
         item.addClass('selected');
         $(item.get(0)).draggable("disable");
 
@@ -110,11 +104,6 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
     },
 
     _columnLabelDropped: function(pivotColumnLabels, columnName) {
-
-        if (columnName != 'Day') {
-            alert('Only Day column can be dropped here in this demo!');
-            return;
-        }
 
         var pivotTable = $('#table-pivot');
         var headRow = pivotTable.find('thead').find('tr');
@@ -199,14 +188,14 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
 
     _calculateValueForRow: function(row, pivotInfo) {
         var val = row.find('td:eq(' + pivotInfo.valueColumnIdx + ')').text();
-        console.log(val);
         return parseFloat(val);
     },
 
     _calculateSum: function(pivotInfo, rowName, colName) {
 
         var result = 0;
-
+        var precision = 2;
+        
         var self = this;
         $('#sales tbody tr').each(function() {
             var row = $(this);
@@ -215,7 +204,7 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
             }
         });
 
-        return result;
+        return result.toFixed(precision);
     }
 
 };

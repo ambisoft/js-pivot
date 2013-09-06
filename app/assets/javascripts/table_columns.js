@@ -9,6 +9,11 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
             $('.draggable-columns li').draggable({
                 opacity: 0.7, helper: 'clone'
             });
+            return this;
+        },
+        
+        findColumn: function(columnName) {
+            return $(".draggable-columns li:contains('" + columnName + "')");
         },
 
         _createColumns: function() {
