@@ -3,62 +3,22 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
 
 (function(d, $) {
 
+    var _dialog = null;
+
     PivotTableApp.sales = {
 
     init: function(sales_url) {
-        var self = this;
+        
+        _dialog = PivotTableApp.dialog.init();     
 
-        this._initDataTable(sales_url);
-        this._initDialog();
+        this._initDataTable(sales_url);        
         this._initDraggables();
         this._initDroppables();
 
         $('#btn-configure-pivot').click(function(e) {
-            self._openDialog();
+            _dialog.open();            
         });
-    },
-
-    _initDialog: function() {
-        $('#dialog-modal').dialog({
-          autoOpen: false,
-          width: 950,
-          height: 500,
-          resizable: false,
-          draggable: false,
-          modal: true
-        });
-    },
-
-    _openDialog: function() {
-        this._resetDialog();
-        $('#dialog-modal').dialog('open');
-    },
-
-    _resetDialog: function() {
-
-        this._resetPivotTable();
-        this._resetDraggableCols();
-        this._resetPivotRoles();
-    },
-
-    _resetPivotTable: function() {
-        var pivot = $('#table-pivot');
-        $('thead', pivot).empty();
-        $('tbody', pivot).empty();
-    },
-
-    _resetDraggableCols: function() {
-        $('ul.draggable-columns li').each(function() {
-            $(this).removeClass('selected');
-            $(this).draggable("enable");
-        });
-    },
-    
-    _resetPivotRoles: function() {
-        $('ul.pivot-roles').each(function() {
-            $('div', this).empty();
-        });
-    },
+    },    
 
     _initDataTable: function(sales_url) {
         $(d).on('click', '#sales tbody tr', function() {
