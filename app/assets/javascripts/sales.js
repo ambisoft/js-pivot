@@ -6,6 +6,7 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
     PivotTableApp.sales = {
 
     init: function(sales_url) {
+        var self = this;
 
         this._initDataTable(sales_url);
         this._initDialog();
@@ -13,7 +14,7 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
         this._initDroppables();
 
         $('#btn-configure-pivot').click(function(e) {
-          $('#dialog-modal').dialog('open');
+            self._openDialog();
         });
     },
 
@@ -22,7 +23,40 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
           autoOpen: false,
           width: 950,
           height: 500,
+          resizable: false,
+          draggable: false,
           modal: true
+        });
+    },
+
+    _openDialog: function() {
+        this._resetDialog();
+        $('#dialog-modal').dialog('open');
+    },
+
+    _resetDialog: function() {
+
+        this._resetPivotTable();
+        this._resetDraggableCols();
+        this._resetPivotRoles();
+    },
+
+    _resetPivotTable: function() {
+        var pivot = $('#table-pivot');
+        $('thead', pivot).empty();
+        $('tbody', pivot).empty();
+    },
+
+    _resetDraggableCols: function() {
+        $('ul.draggable-columns li').each(function() {
+            $(this).removeClass('selected');
+            $(this).draggable("enable");
+        });
+    },
+    
+    _resetPivotRoles: function() {
+        $('ul.pivot-roles').each(function() {
+            $('div', this).empty();
         });
     },
 
@@ -86,13 +120,14 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
         });
 
         pivotValues.on('drop', function(event, ui) {
-          var columnName = ui.draggable.text();          
+          var columnName = ui.draggable.text();
           self._valueDropped(pivotValues, columnName);
         });
     },
 
     _rowLabelDropped: function(pivotRowLabels, columnName) {
-        
+
+
         if (columnName != 'Product') {
             alert('Only Product column can be dropped here in this demo!');
             return;
@@ -130,12 +165,12 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
     },
 
     _columnLabelDropped: function(pivotColumnLabels, columnName) {
-        
+
         if (columnName != 'Day') {
             alert('Only Day column can be dropped here in this demo!');
             return;
         }
-        
+
         var pivotTable = $('#table-pivot');
         var headRow = pivotTable.find('thead').find('tr');
         if (!headRow.length) {
@@ -143,7 +178,7 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
         } else {
             var item = $(".draggable-columns li:contains('" + columnName + "')");
             item.addClass('selected');
-            $(item.get(0)).draggable("disable");            
+            $(item.get(0)).draggable("disable");
             $('div', pivotColumnLabels).text(columnName);
             var uniqueValues = this._uniqueValues(columnName);
             $(uniqueValues).each(function() {
@@ -152,19 +187,19 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
             });
         }
     },
-    
+
     _valueDropped: function(pivotValues, columnName) {
-        
+
         if (columnName != 'Sales') {
             alert('Only Sales column can be dropped here in this demo!');
             return;
         }
-        
+
         var self = this;
-        
+
         var pivotTable = $('#table-pivot');
         var headRow = pivotTable.find('thead').find('tr');
-        
+
         if (!headRow.length) {
             alert('Select Row Label first!');
         } else {
@@ -172,19 +207,19 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
             if (colsCount == 0) {
                 alert('Select Column Labels first!');
             } else {
-                
+
                 var item = $(".draggable-columns li:contains('" + columnName + "')");
                 item.addClass('selected');
-                $(item.get(0)).draggable("disable");        
-                $('div', pivotValues).text(columnName);               
-                
+                $(item.get(0)).draggable("disable");
+                $('div', pivotValues).text(columnName);
+
                 var rowLabel = $('.pivot-row-labels div').text();
                 var columnLabels = $('.pivot-column-labels div').text();
-                
+
                 var rowLabelIdx = this._columnIndex(rowLabel);
-                var colLabelIdx = this._columnIndex(columnLabels);        
+                var colLabelIdx = this._columnIndex(columnLabels);
                 var valueColumnIdx = this._columnIndex(columnName);
-                
+
                 var pivotInfo = {
                     rowLabel: rowLabel,
                     rowLabelIdx: rowLabelIdx,
@@ -193,40 +228,40 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
                     valueColumn: columnName,
                     valueColumnIdx: valueColumnIdx
                 };
-                
+
                 pivotTable.find('tbody tr').each(function(rowIndex) {
                     var row = $(this);
                     for (var col = 0; col < colsCount; col++) {
                         var rowName = row.find('td:first').text();
-                        var colName = headRow.find('th:eq(' + (col + 1) + ')').text();                        
+                        var colName = headRow.find('th:eq(' + (col + 1) + ')').text();
                         var cell = $('<td/>').text(self._calculateSum(pivotInfo, rowName, colName));
-                        row.append(cell);                        
+                        row.append(cell);
                     }
-                });                
+                });
             }
-        }        
+        }
     },
-    
+
     _columnIndex: function(colName) {
         return $('#sales thead').find('th:contains(' + colName + ')').index();
     },
-    
+
     _rowMatches: function(row, pivotInfo, rowName, colName) {
         var rowValue = row.find('td:eq(' + pivotInfo.rowLabelIdx + ')').text();
-        var colValue = row.find('td:eq(' + pivotInfo.columnLabelsIdx + ')').text();        
-        return (rowValue == rowName) && (colValue == colName);        
+        var colValue = row.find('td:eq(' + pivotInfo.columnLabelsIdx + ')').text();
+        return (rowValue == rowName) && (colValue == colName);
     },
-    
+
     _calculateValueForRow: function(row, pivotInfo) {
         var val = row.find('td:eq(' + pivotInfo.valueColumnIdx + ')').text();
-        console.log(val);        
+        console.log(val);
         return parseFloat(val);
     },
-    
-    _calculateSum: function(pivotInfo, rowName, colName) {                        
-        
+
+    _calculateSum: function(pivotInfo, rowName, colName) {
+
         var result = 0;
-        
+
         var self = this;
         $('#sales tbody tr').each(function() {
             var row = $(this);
@@ -234,10 +269,10 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
                 result += self._calculateValueForRow(row, pivotInfo);
             }
         });
-        
+
         return result;
     }
-        
+
 };
 
 })(document, jQuery);
