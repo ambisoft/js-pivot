@@ -4,15 +4,16 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
 (function(d, $) {
 
     var _dialog = null;
+    var _table_columns = null;
 
     PivotTableApp.sales = {
 
     init: function(sales_url) {
         
-        _dialog = PivotTableApp.dialog.init();     
+        _dialog = PivotTableApp.dialog.init();
+        _table_columns = PivotTableApp.table_columns.init();
 
         this._initDataTable(sales_url);        
-        this._initDraggables();
         this._initDroppables();
 
         $('#btn-configure-pivot').click(function(e) {
@@ -40,22 +41,7 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
                 { "bVisible": true, sClass: 'amount' }
            ]
         });
-    },
-
-    _initDraggables: function() {
-        this._createColumns();
-        $('.draggable-columns li').draggable({
-          opacity: 0.7, helper: 'clone'
-        });
-    },
-
-    _createColumns: function() {
-        var draggables = $('.draggable-columns');
-        var cols = $('#sales thead th');
-        $(cols).each(function() {
-            draggables.append($('<li/>').addClass('draggable-column').text($(this).text()));
-        });
-    },
+    },    
 
     _initDroppables: function() {
 
@@ -86,7 +72,6 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
     },
 
     _rowLabelDropped: function(pivotRowLabels, columnName) {
-
 
         if (columnName != 'Product') {
             alert('Only Product column can be dropped here in this demo!');
