@@ -7,7 +7,9 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
         init: function() {
             this._createColumns();
             $('.draggable-columns li').draggable({
-                opacity: 0.7, helper: 'clone'
+                opacity: 0.7, 
+                helper: 'clone',
+                containment: "#dialog-modal"                
             });
             return this;
         },

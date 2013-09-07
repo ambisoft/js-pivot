@@ -178,7 +178,8 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
                     for (var col = 0; col < colsCount; col++) {
                         var rowName = row.find('td:first').text();
                         var colName = headRow.find('th:eq(' + (col + 1) + ')').text();
-                        var cell = $('<td/>').text(self._calculateSum(pivotInfo, rowName, colName));
+                        var cell = $('<td/>').addClass('amount')
+                                   .text(self._calculateSum(pivotInfo, rowName, colName));
                         row.append(cell);
                     }
                 });
