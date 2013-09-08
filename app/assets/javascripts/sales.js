@@ -207,7 +207,7 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
                         var rowName = row.find('td:first').text();
                         var colName = headRow.find('th:eq(' + (col + 1) + ')').text();                        
                         var cell = row.find('td:eq(' + (col + 1) + ')');
-                        cell.text(self._calculateSum(pivotInfo, rowName, colName));                        
+                        cell.addClass('amount').text(self._calculateSum(pivotInfo, rowName, colName));                        
                     }
                 });                
             }
