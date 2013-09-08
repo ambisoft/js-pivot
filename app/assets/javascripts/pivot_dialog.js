@@ -1,10 +1,10 @@
 var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
 
 (function(d, $) {
-    
+
     PivotTableApp.dialog = {
-        
-        init: function() {            
+
+        init: function() {
             $('#dialog-modal').dialog({
               autoOpen: false,
               width: 950,
@@ -15,12 +15,12 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
             });
             return this;
         },
-        
+
         open: function() {
             this._reset();
             $('#dialog-modal').dialog('open');
         },
-               
+
         _reset: function() {
             this._resetPivotTable();
             this._resetDraggableCols();
@@ -28,9 +28,10 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
         },
 
         _resetPivotTable: function() {
-            var pivot = $('#table-pivot');
-            $('thead', pivot).empty();
-            $('tbody', pivot).empty();
+            $('#table-pivot').remove();
+            var table = $('<table/>').attr('id', 'table-pivot');
+            table.append($('<thead/>')).append($('<tbody/>'));
+            $('#table-wrapper').append(table);
         },
 
         _resetDraggableCols: function() {
@@ -44,6 +45,6 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
             $('ul.pivot-roles').each(function() {
                 $('div', this).empty();
             });
-        }        
+        }
     }
 })(document, jQuery);
