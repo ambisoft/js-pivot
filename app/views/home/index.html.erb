@@ -24,35 +24,7 @@
   <input type="button" value="Generate Pivot Table" class="btn-configure-pivot"/>
 </div>
 
-<div id="dialog-modal" title="Define Pivot Table">
-  
-    All Columns:
-    <ul class="draggable-columns">      
-    </ul>
-    
-    <table id="table-pivot">
-      <thead>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-  
-    <ul class="pivot-roles">
-      <li class="pivot-row-labels">
-        <h4>Row Label</h4>
-        <div></div>
-      </li>
-      <li class="pivot-column-labels">
-        <h4>Column Labels</h4>
-        <div></div>
-      </li>    
-      <li class="pivot-values">
-        <h4>Values</h4>
-        <div></div>
-      </li>
-    </ul>      
-  
-</div>
+<%= render 'pivot_dialog' %>
 
 <script type="text/javascript">
   $(function() {

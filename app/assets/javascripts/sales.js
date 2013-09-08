@@ -6,6 +6,13 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
     var _dialog = null;
     var _table_columns = null;
 
+    var _resultDataTableOptions = {
+        bPaginate: false,
+        bLengthChange: false,
+        bInfo: false,
+        bFilter: false
+    };
+
     PivotTableApp.sales = {
 
     init: function(sales_url) {
@@ -71,6 +78,10 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
         });
     },
 
+    _activateDataTableOnResult: function() {
+        $('#table-pivot').dataTable(_resultDataTableOptions);
+    },
+
     _rowLabelDropped: function(pivotRowLabels, columnName) {
 
         var target = $('div', pivotRowLabels);
@@ -129,7 +140,24 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
                 var cell = $('<th/>').text(this);
                 headRow.append(cell);
             });
+            
+            this._createEmptyCells();
+            
+            this._activateDataTableOnResult();
         }
+    },
+
+    _createEmptyCells: function() {
+        var pivotTable = $('#table-pivot');
+        var headRow = pivotTable.find('thead').find('tr');
+        var colsCount = headRow.find('th').length - 1;
+        pivotTable.find('tbody tr').each(function(rowIndex) {
+            var row = $(this);
+            for (var col = 0; col < colsCount; col++) {
+                var cell = $('<td/>').text('-');                                   
+                row.append(cell);
+            }
+        });
     },
 
     _valueDropped: function(pivotValues, columnName) {
@@ -177,12 +205,11 @@ var PivotTableApp = window.PivotTableApp ? window.PivotTableApp : {};
                     var row = $(this);
                     for (var col = 0; col < colsCount; col++) {
                         var rowName = row.find('td:first').text();
-                        var colName = headRow.find('th:eq(' + (col + 1) + ')').text();
-                        var cell = $('<td/>').addClass('amount')
-                                   .text(self._calculateSum(pivotInfo, rowName, colName));
-                        row.append(cell);
+                        var colName = headRow.find('th:eq(' + (col + 1) + ')').text();                        
+                        var cell = row.find('td:eq(' + (col + 1) + ')');
+                        cell.text(self._calculateSum(pivotInfo, rowName, colName));                        
                     }
-                });
+                });                
             }
         }
     },
